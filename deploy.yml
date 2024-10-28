@@ -1,0 +1,23 @@
+---
+- name: Deploy Application with Docker
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Build Docker image
+      command: docker build -t chat-app:v1 .
+
+    - name: Run Docker container
+      command: docker run -d -p 3000:3000 chat-app:v1 
